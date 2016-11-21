@@ -1,0 +1,29 @@
+<!--width="99%" height="99%"-->
+<leaflet lf-center="gulf" markers="markers" event-broadcast="events"></leaflet>
+
+<script type="text/ng-template" id="panel.template.html">
+  <md-content>
+      <div md-whiteframe="3" layout="column" layout-fill style="min-width:60%">
+        <md-toolbar class="md-hue-2">
+          <div class="md-toolbar-tools">
+            <div>
+              {{panel.heading}}
+            </div>
+            <div flex></div>
+            <div>
+              <md-button class="md-icon-button" aria-label="View" ng-click="viewDetail(panel)">
+                <md-icon md-font-set="material-icons">dashboard</md-icon>
+              </md-button>
+            </div>
+          </div>
+        </md-toolbar>
+        <div layout-padding>
+          <md-list>
+            <md-list-item ng-repeat="item in panel.content">
+              {{item}}
+            </md-list-item>
+          </md-list>
+        </div>
+      </div>
+  </md-content>
+</script>

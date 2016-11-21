@@ -1,0 +1,18 @@
+{
+  "dohaMarker":{
+    "lat":25.292066,
+    "lng":51.524671,
+    "draggable":false,
+    "icon":{
+      "iconUrl":"/img/marker.png",
+      "iconAnchor":[10,31]
+    },
+    "data":{
+      "heading":"Doha",
+      "content":[
+        "an","array","of","data"
+      ],
+      "siteId":1
+    }
+  }
+}
