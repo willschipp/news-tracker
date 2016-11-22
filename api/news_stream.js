@@ -11,10 +11,12 @@ var method = routes.prototype;
 
 function routes(io) {
 
-
-  router.get('/',function(req,res) {
+  router.post('/',function(req,res) {
+    //get the url
+    var url = req.body.url;
     //get a news feed
-    var feed = request("http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/world/rss.xml");
+    // var feed = request("http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/world/rss.xml");
+    var feed = request(url);
     var feedparser = new FeedParser();
     feed.on('error',function(err) {
       console.log(err);
@@ -49,32 +51,32 @@ function routes(io) {
             var result = lookup.countries({name:taggedWord[0]});
             if (result.length > 0) {
               var countryInfo = country.info(result[0].alpha2);
-              var data = {};
-              data.title = item.title;
-              data.description = item.description;
-              data.guid = item.guid;
-              data.link = item.link;
-              data.summary = item.summary;
-              data.pubDate = item.pubDate;
-              //create a marker
-              var marker = {};
-              marker[item.guid] = {
-                  "lat":countryInfo.latlng[0],
-                  "lng":countryInfo.latlng[1],
-                  "draggable":false,
-                  "icon":{
-                    "iconUrl":"/img/marker.png",
-                    "iconAnchor":[10,31]
-                  },
-                  "data":{
-                    "heading":taggedWord[0],
-                    "content":data
-                  }
-                }
+              // var data = {};
+              // data.title = item.title;
+              // data.description = item.description;
+              // data.guid = item.guid;
+              // data.link = item.link;
+              // data.summary = item.summary;
+              // data.pubDate = item.pubDate;
+              // //create a marker
+              // var marker = {};
+              // marker[item.guid] = {
+              //     "lat":countryInfo.latlng[0],
+              //     "lng":countryInfo.latlng[1],
+              //     "draggable":false,
+              //     "icon":{
+              //       "iconUrl":"/img/marker.png",
+              //       "iconAnchor":[10,31]
+              //     },
+              //     "data":{
+              //       "heading":taggedWord[0],
+              //       "content":data
+              //     }
+              //   }
               // console.log(countryInfo.latlng);
 
 
-              io.emit('news',marker);
+              io.emit('news',createMarker(item,countryInfo.latlng[0],countryInfo.latlng[1]));
             }
           }//end if
         }//end for
@@ -85,6 +87,32 @@ function routes(io) {
 
     return res.sendStatus(201);
   });
+
+  function createMarker(item,lat,lng) {
+    var data = {};
+    data.title = item.title;
+    data.description = item.description;
+    data.guid = item.guid;
+    data.link = item.link;
+    data.summary = item.summary;
+    data.pubDate = item.pubDate;
+
+    var marker = {};
+    marker[item.guid] = {
+        "lat":lat,
+        "lng":lng,
+        "draggable":false,
+        "icon":{
+          "iconUrl":"/img/marker.png",
+          "iconAnchor":[10,31]
+        },
+        "data":{
+          "heading":data.title,
+          "content":data
+        }
+      }
+    return marker;
+  }
 
   return router;
 }
